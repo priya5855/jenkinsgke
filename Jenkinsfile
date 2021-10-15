@@ -5,7 +5,7 @@ pipeline {
     agent any
     environment {
         PROJECT_ID = 'pelagic-radio-328904'
-	CLUSTER_NAME = 'CLUSTER-NAME'
+	CLUSTER_NAME = 'Jenkinsgre'
         LOCATION = 'us-east1'
         CREDENTIALS_ID = 'gke'
         CLUSTER_NAME_TEST = 'CLUSTER-NAME-1'
@@ -23,7 +23,7 @@ pipeline {
                     myapp = docker.builb("7374659690/hello:${env.BUILD_ID}")
                 }
             }
-        }
+        }*/
         stage("Push image") {
             steps {
                 script {
