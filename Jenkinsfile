@@ -1,12 +1,8 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'pipeline' {
-    agent any
-    environment {
-        PROJECT_ID = 'pelagic-radio-328904'
-	CLUSTER_NAME = 'Jenkinsgre'
-        LOCATION = 'us-east1'
+        PROJECT_ID = 'PROJECT-ID'
+        LOCATION = 'CLUSTER-LOCATION'
         CREDENTIALS_ID = 'gke'
         CLUSTER_NAME_TEST = 'CLUSTER-NAME-1'
         CLUSTER_NAME_PROD = 'CLUSTER-NAME-2'          
@@ -20,15 +16,14 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.builb("7374659690/hello:${env.BUILD_ID}")
+                    myapp = docker.build("DOCKER-HUB-USERNAME/hello:${env.BUILD_ID}")
                 }
             }
-        }*/
+        }
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub');
-                    {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                             myapp.push("latest")
                             myapp.push("${env.BUILD_ID}")
                     }
@@ -41,7 +36,7 @@ pipeline {
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME_TEST, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
             }
         }
-        stage('Deploy to GKE ') {
+        stage('Deploy to GKE production cluster') {
             steps{
                 input message:"Proceed with final deployment?"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME_PROD, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
