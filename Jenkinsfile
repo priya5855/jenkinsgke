@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'pipeline {
+        PROJECT_ID = 'pipeline' {
     agent any
     environment {
         PROJECT_ID = 'pelagic-radio-328904'
