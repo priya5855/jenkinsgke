@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         PROJECT_ID = 'pelagic-radio-328904'
-        LOCATION = 'us-east1'
+        LOCATION = 'us-east1-b'
         CREDENTIALS_ID = 'gke'
         CLUSTER_NAME_TEST = 'Jenkinsgre'         
     }
