@@ -1,11 +1,10 @@
 pipeline {
     agent any
     environment {
-        PROJECT_ID = 'PROJECT-ID'
-        LOCATION = 'CLUSTER-LOCATION'
+        PROJECT_ID = 'pelagic-radio-328904'
+        LOCATION = 'us-east1'
         CREDENTIALS_ID = 'gke'
-        CLUSTER_NAME_TEST = 'CLUSTER-NAME-1'
-        CLUSTER_NAME_PROD = 'CLUSTER-NAME-2'          
+        CLUSTER_NAME_TEST = 'Jenkinsgre'         
     }
     stages {
         stage("Checkout code") {
@@ -30,17 +29,11 @@ pipeline {
                 }
             }
         }       
-        stage('Deploy to GKE test cluster') {
+        stage('Deploy to GKE cluster') {
             steps{
                 sh "sed -i 's/hello:latest/hello:${env.BUILD_ID}/g' deployment.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME_TEST, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
             }
         }
-        stage('Deploy to GKE production cluster') {
-            steps{
-                input message:"Proceed with final deployment?"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME_PROD, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-            }
-        }   
     }    
 }
